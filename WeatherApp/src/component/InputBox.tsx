@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
@@ -9,7 +9,7 @@ type weather = {
     temp_C: string;
   }[];
   nearest_area: {
-    areaName: string;
+    areaName: { value: string }[];
   }[];
 };
 
@@ -18,7 +18,7 @@ export default function InputBox() {
   const [weather, setWeather] = useState<weather | null>(null);
   async function fetchWeather() {
     try {
-      const response = await fetch(`https://wttr.in/${city}?format=j1 `);
+      const response = await fetch(`https://wttr.in/${city}?format=j1`);
       const data = await response.json();
       setWeather(data);
       console.log(data);
@@ -27,13 +27,13 @@ export default function InputBox() {
     }
   }
 
-  useEffect(() => {
-    if (city) {
-      fetchWeather();
-    } else {
-      setWeather(null);
-    }
-  }, [city]);
+  // useEffect(() => {
+  //   if (city) {
+  //     fetchWeather();
+  //   } else {
+  //     setWeather(null);
+  //   }
+  // }, [city]);
   return (
     <div>
       <Box
@@ -67,7 +67,7 @@ export default function InputBox() {
       <div style={{ marginTop: "20px" }}>
         {weather && <p>Humidity: {weather.current_condition[0].humidity}</p>}
         {weather && <p>Temperature: {weather.current_condition[0].temp_C}</p>}
-        {/* {weather && <p> {weather.nearest_area[0].areaName}</p>} */}
+        {weather && <p>Area: {weather.nearest_area[0].areaName[0].value}</p>}
       </div>
     </div>
   );
