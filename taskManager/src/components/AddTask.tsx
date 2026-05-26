@@ -1,7 +1,10 @@
 import { useState } from "react";
 import type { Task } from "../types/tasks";
-export default function AddTask() {
+import type { AddTaskProp } from "../types/AddTaskProp";
+
+export default function AddTask({ onAddTask }: AddTaskProp) {
   const [taskName, setTaskName] = useState("");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(e.target.value);
   };
@@ -9,10 +12,17 @@ export default function AddTask() {
   const handleAddTask = () => {
     if (taskName.trim() === "") {
       alert("Please enter a task name.");
-    } else {
-      let newTask: Task = { id: Date.now(), name: taskName, completed: false };
-      console.log("Task added:", newTask);
+      return;
     }
+
+    const newTask: Task = {
+      id: Date.now(),
+      name: taskName,
+      completed: false,
+    };
+
+    onAddTask(newTask);
+
     setTaskName("");
   };
 
@@ -26,6 +36,7 @@ export default function AddTask() {
         value={taskName}
         onChange={handleChange}
       />
+
       <button onClick={handleAddTask}>Add Task</button>
     </div>
   );
